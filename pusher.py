@@ -6,18 +6,21 @@
 энергия не набирается и не теряется из-за ошибок счета.
 """
 
-import numpy as np
+from numba import njit
+
+from vec3 import add, cross, dot, scale
 
 
+@njit(cache=True)
 def boris_step(r, v, E, B, dt, q_over_m):
-    """Сдвигает координаты r и скорости v, (N, 3), на один шаг dt."""
+    """Сдвигает координату r и скорость v, кортежи (x, y, z), на шаг dt."""
     h = 0.5 * q_over_m * dt
 
-    v_minus = v + h * E  # половина разгона полем E
-    t = h * B  # поворот в поле B
-    s = 2 * t / (1 + np.sum(t * t, axis=1, keepdims=True))
-    v_prime = v_minus + np.cross(v_minus, t)
-    v_plus = v_minus + np.cross(v_prime, s)
-    v_new = v_plus + h * E  # вторая половина разгона
+    v_minus = add(v, scale(E, h))  # половина разгона полем E
+    t = scale(B, h)  # поворот в поле B
+    s = scale(t, 2.0 / (1.0 + dot(t, t)))
+    v_prime = add(v_minus, cross(v_minus, t))
+    v_plus = add(v_minus, cross(v_prime, s))
+    v_new = add(v_plus, scale(E, h))  # вторая половина разгона
 
-    return r + v_new * dt, v_new
+    return add(r, scale(v_new, dt)), v_new
