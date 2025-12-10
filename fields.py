@@ -7,7 +7,7 @@ from config import K_COULOMB, MU0_4PI
 from vec3 import add, cross, scale
 
 
-@njit(cache=True)
+@njit
 def fields_at(r, mid, dl, dq, current):
     """Поля E и B в точке r = (x, y, z).
 

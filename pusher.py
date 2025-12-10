@@ -11,7 +11,7 @@ from numba import njit
 from vec3 import add, cross, dot, scale
 
 
-@njit(cache=True)
+@njit
 def boris_step(r, v, E, B, dt, q_over_m):
     """Сдвигает координату r и скорость v, кортежи (x, y, z), на шаг dt."""
     h = 0.5 * q_over_m * dt

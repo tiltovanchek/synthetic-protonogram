@@ -7,7 +7,7 @@ from fields import fields_at
 from pusher import boris_step
 
 
-@njit(parallel=True, cache=True)
+@njit(parallel=True)
 def _track_all(r0, v0, mid, dl, dq, current, dt, start_y, exit_y, q_over_m, max_steps):
     """Протоны не влияют друг на друга, поэтому каждый ведется
     целиком в своем потоке (prange), без синхронизации на шагах.
