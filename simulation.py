@@ -40,13 +40,13 @@ def track(r, v, target, dt, start_y, exit_y, q_over_m, max_steps):
     return r, v
 
 
-def project_to_screen(r, v, screen_y):
+def project_to_screen(r, v, exit_y, screen_y):
     """Продолжает прямые траектории до экрана y = screen_y.
 
-    Возвращает координаты x, z на экране.
-    Протоны, летящие от экрана, отбрасываются.
+    Возвращает координаты x, z на экране. Берутся только протоны,
+    вылетевшие из слоя вперед (y >= exit_y) и летящие к экрану.
     """
-    ok = v[:, 1] > 0
+    ok = (r[:, 1] >= exit_y) & (v[:, 1] > 0)
     r, v = r[ok], v[ok]
     t = (screen_y - r[:, 1]) / v[:, 1]
     return r[:, 0] + v[:, 0] * t, r[:, 2] + v[:, 2] * t

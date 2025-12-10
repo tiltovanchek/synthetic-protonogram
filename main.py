@@ -38,7 +38,7 @@ def main():
                             mass=cfg.M_PROTON, mev=cfg.MEV)
     r, v = track(r, v, target, cfg.DT, cfg.START_Y, cfg.EXIT_Y,
                  cfg.Q_OVER_M, cfg.MAX_STEPS)
-    x, z = project_to_screen(r, v, cfg.SCREEN_Y)
+    x, z = project_to_screen(r, v, cfg.EXIT_Y, cfg.SCREEN_Y)
     print(f"Время счета: {time.time() - start:.2f} с")
 
     title = (f"I = {cfg.TARGET_CURRENT / 1e3:g} кА, "
